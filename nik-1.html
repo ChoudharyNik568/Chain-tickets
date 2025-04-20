@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TicketChain | Decentralized Event Ticketing</title>
+    <style>
+      :root {
+        --primary: #6e45e2;
+        --secondary: #88d3ce;
+        --dark: #1a1a2e;
+        --light: #f5f5f5;
+        --success: #4caf50;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: var(--light);
+        color: var(--dark);
+        line-height: 1.6;
+      }
+
+      header {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        padding: 1rem 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+      }
+
+      .logo span {
+        color: var(--secondary);
+      }
+
+      nav ul {
+        display: flex;
+        list-style: none;
+      }
+
+      nav ul li {
+        margin-left: 2rem;
+      }
+
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      nav ul li a:hover {
+        color: var(--secondary);
+      }
+
+      .btn {
+        display: inline-block;
+        background-color: white;
+        color: var(--primary);
+        padding: 0.7rem 1.5rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-outline {
+        background-color: transparent;
+        color: white;
+        border: 2px solid white;
+      }
+
+      .btn-outline:hover {
+        background-color: white;
+        color: var(--primary);
+      }
+
+      .hero {
+        padding: 5rem 5%;
+        text-align: center;
+        background: linear-gradient(
+          135deg,
+          rgba(110, 69, 226, 0.1),
+          rgba(136, 211, 206, 0.1)
+        );
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        max-width: 700px;
+        margin: 0 auto 2rem;
+        color: #555;
+      }
+
+      .hero-btns {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      .how-it-works {
+        padding: 5rem 5%;
+        background-color: white;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 3rem;
+        font-size: 2.5rem;
+        color: var(--dark);
+      }
+
+      .steps {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 2rem;
+      }
+
+      .step {
+        flex: 1;
+        min-width: 300px;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      .step:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .step-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+      }
+
+      .step h3 {
+        margin-bottom: 1rem;
+        color: var(--primary);
+      }
+
+      .benefits {
+        padding: 5rem 5%;
+        background: linear-gradient(
+          135deg,
+          rgba(110, 69, 226, 0.05),
+          rgba(136, 211, 206, 0.05)
+        );
+      }
+
+      .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+      }
+
+      .benefit-card {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .benefit-card h3 {
+        color: var(--primary);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+      }
+
+      .benefit-card h3::before {
+        content: "✓";
+        color: var(--success);
+        margin-right: 0.5rem;
+        font-size: 1.5rem;
+      }
+
+      .events {
+        padding: 5rem 5%;
+      }
+
+      .events-filter {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .filter-btn {
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        background-color: white;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .filter-btn.active,
+      .filter-btn:hover {
+        background-color: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .events-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .event-card {
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+      }
+
+      .event-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .event-img {
+        height: 200px;
+        background-color: #eee;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .event-info {
+        padding: 1.5rem;
+      }
+
+      .event-date {
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .event-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+      }
+
+      .event-location {
+        color: #777;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+      }
+
+      .event-price {
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+      }
+
+      .organizers {
+        padding: 5rem 5%;
+        background-color: white;
+        text-align: center;
+      }
+
+      .organizers p {
+        max-width: 700px;
+        margin: 0 auto 2rem;
+      }
+
+      .testimonials {
+        padding: 5rem 5%;
+        background: linear-gradient(
+          135deg,
+          rgba(110, 69, 226, 0.05),
+          rgba(136, 211, 206, 0.05)
+        );
+      }
+
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .testimonial-card {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .testimonial-text {
+        font-style: italic;
+        margin-bottom: 1rem;
+      }
+
+      .testimonial-author {
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .faq {
+        padding: 5rem 5%;
+      }
+
+      .faq-item {
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+      }
+
+      .faq-question {
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .faq-answer {
+        padding-top: 1rem;
+        display: none;
+      }
+
+      .faq-item.active .faq-answer {
+        display: block;
+      }
+
+      footer {
+        background-color: var(--dark);
+        color: white;
+        padding: 3rem 5%;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-col h3 {
+        margin-bottom: 1rem;
+        color: var(--secondary);
+      }
+
+      .footer-col ul {
+        list-style: none;
+      }
+
+      .footer-col ul li {
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-col ul li a {
+        color: #ddd;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .footer-col ul li a:hover {
+        color: var(--secondary);
+      }
+
+      .social-links {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .social-links a {
+        color: white;
+        font-size: 1.5rem;
+      }
+
+      .newsletter input {
+        padding: 0.7rem;
+        border-radius: 5px;
+        border: none;
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+
+      .copyright {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid #444;
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .steps {
+          flex-direction: column;
+        }
+
+        nav ul {
+          display: none;
+        }
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo">Ticket<span>Chain</span></div>
+      <nav>
+        <ul>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#events">Events</a></li>
+          <li><a href="#organizers">For Organizers</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <div
+        id="walletStatus"
+        style="margin-right: 1rem; font-size: 0.9rem"
+      ></div>
+      <button class="btn btn-outline" id="connectWallet">Connect Wallet</button>
+    </header>
+
+    <section class="hero">
+      <h1>Decentralized Event Ticketing</h1>
+      <p>
+        Buy, sell, and trade event tickets as NFTs—secure, transparent, and
+        fair. No fake tickets, no scalping, no high fees.
+      </p>
+      <div class="hero-btns">
+        <a href="#events" class="btn">Explore Events</a>
+        <a href="#organizers" class="btn btn-outline">Create Event</a>
+      </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+      <h2 class="section-title">How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-icon">🖼️</div>
+          <h3>Mint Tickets as NFTs</h3>
+          <p>
+            Event organizers create limited-edition NFT tickets on the
+            blockchain. Smart contracts ensure authenticity.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-icon">💰</div>
+          <h3>Buy & Sell with No Scalpers</h3>
+          <p>
+            Fans purchase directly from organizers or resell at fair prices.
+            Resale price caps prevent exploitation.
+          </p>
+        </div>
+        <div class="step">
+          <div class="step-icon">🎟️</div>
+          <h3>Scan & Enter with Ease</h3>
+          <p>
+            Venues verify NFT tickets via QR codes or wallet authentication. No
+            fake tickets, no delays.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="benefits">
+      <h2 class="section-title">Why Choose TicketChain?</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <h3>Zero Fake Tickets</h3>
+          <p>
+            Every ticket is a verified NFT on the blockchain, making
+            counterfeits impossible.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <h3>Lower Fees</h3>
+          <p>
+            No middlemen taking 30% cuts. Pay only minimal blockchain
+            transaction fees.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <h3>Fair Resale Market</h3>
+          <p>
+            Controlled resale pricing prevents scalping and keeps tickets
+            affordable.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <h3>Instant Payouts</h3>
+          <p>
+            Artists & organizers get paid instantly in crypto or fiat with no
+            delays.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="events" id="events">
+      <h2 class="section-title">Upcoming Events</h2>
+      <div class="events-filter">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="music">Music</button>
+        <button class="filter-btn" data-filter="sports">Sports</button>
+        <button class="filter-btn" data-filter="conference">Conferences</button>
+      </div>
+      <div class="events-grid" id="eventsContainer">
+        <!-- Events will be loaded here by JavaScript -->
+      </div>
+    </section>
+
+    <section class="organizers" id="organizers">
+      <h2 class="section-title">For Event Organizers</h2>
+      <p>
+        Take control of your ticketing process and maximize your revenue while
+        protecting your fans from scalpers.
+      </p>
+      <div class="benefits-grid" style="margin-top: 2rem">
+        <div class="benefit-card">
+          <h3>Full Control</h3>
+          <p>
+            Set royalties, prevent scalping, and manage your event with our
+            powerful tools.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <h3>Higher Revenue</h3>
+          <p>
+            Keep more profits with no middlemen taking huge cuts from your
+            ticket sales.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <h3>Fraud Protection</h3>
+          <p>
+            No chargebacks or fake tickets. Every transaction is secured by
+            blockchain.
+          </p>
+        </div>
+      </div>
+      <a href="#" class="btn" style="margin-top: 2rem">Create Your Event</a>
+    </section>
+
+    <section class="testimonials">
+      <h2 class="section-title">What People Are Saying</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-text">
+            "Finally, a ticketing system that actually works for fans! I saved
+            40% on concert tickets compared to traditional platforms."
+          </p>
+          <p class="testimonial-author">- Sarah M., Music Fan</p>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">
+            "As an event organizer, TicketChain has helped me increase my
+            revenue by 25% while ensuring my fans get fair prices."
+          </p>
+          <p class="testimonial-author">- David L., Event Organizer</p>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">
+            "The NFT tickets were so easy to use. Just scanned my phone at the
+            venue and walked right in. No more paper tickets!"
+          </p>
+          <p class="testimonial-author">- Michael T., Tech Enthusiast</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq" id="faq">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">How do I buy a ticket? <span>+</span></div>
+          <div class="faq-answer">
+            Connect your crypto wallet, browse available events, and mint your
+            NFT ticket directly. You can pay with cryptocurrency or credit card
+            in some cases.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I resell my ticket? <span>+</span></div>
+          <div class="faq-answer">
+            Yes, but only within our platform at fair prices. Organizers can set
+            maximum resale prices to prevent scalping.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            Which blockchains do you support? <span>+</span>
+          </div>
+          <div class="faq-answer">
+            We currently support Ethereum, Polygon, and Solana. We're adding
+            more chains based on community demand.
+          </div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">
+            What if I lose access to my wallet? <span>+</span>
+          </div>
+          <div class="faq-answer">
+            We recommend storing your recovery phrase securely. However, we're
+            working on a decentralized recovery system for lost tickets.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>TicketChain</h3>
+          <p>Decentralized ticketing powered by blockchain technology.</p>
+          <div class="social-links">
+            <a href="#">Twitter</a>
+            <a href="#">Discord</a>
+            <a href="#">Telegram</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#organizers">For Organizers</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Smart Contract</a></li>
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Newsletter</h3>
+          <p>Stay updated on upcoming events and platform updates.</p>
+          <form class="newsletter">
+            <input type="email" placeholder="Your email address" />
+            <button type="submit" class="btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>© 2023 TicketChain. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      // Sample event data
+      const events = [
+        {
+          id: 1,
+          title: "Web3 Summit 2023",
+          date: "Nov 15-17, 2023",
+          location: "San Francisco, CA",
+          price: "0.1 ETH",
+          category: "conference",
+          image: "https://source.unsplash.com/random/600x400/?conference",
+        },
+        {
+          id: 2,
+          title: "Global Music Festival",
+          date: "Dec 31, 2023",
+          location: "Miami, FL",
+          price: "0.05 ETH",
+          category: "music",
+          image: "https://source.unsplash.com/random/600x400/?concert",
+        },
+        {
+          id: 3,
+          title: "Championship Finals",
+          date: "Jan 20, 2024",
+          location: "New York, NY",
+          price: "0.15 ETH",
+          category: "sports",
+          image: "https://source.unsplash.com/random/600x400/?stadium",
+        },
+        {
+          id: 4,
+          title: "Jazz Night",
+          date: "Oct 28, 2023",
+          location: "Chicago, IL",
+          price: "0.03 ETH",
+          category: "music",
+          image: "https://source.unsplash.com/random/600x400/?jazz",
+        },
+        {
+          id: 5,
+          title: "Blockchain Expo",
+          date: "Feb 10-12, 2024",
+          location: "Austin, TX",
+          price: "0.08 ETH",
+          category: "conference",
+          image: "https://source.unsplash.com/random/600x400/?blockchain",
+        },
+        {
+          id: 6,
+          title: "International Cup",
+          date: "Mar 5, 2024",
+          location: "Los Angeles, CA",
+          price: "0.2 ETH",
+          category: "sports",
+          image: "https://source.unsplash.com/random/600x400/?soccer",
+        },
+      ];
+
+      // Load events
+      function loadEvents(filter = "all") {
+        const eventsContainer = document.getElementById("eventsContainer");
+        eventsContainer.innerHTML = "";
+
+        const filteredEvents =
+          filter === "all"
+            ? events
+            : events.filter((event) => event.category === filter);
+
+        if (filteredEvents.length === 0) {
+          eventsContainer.innerHTML =
+            "<p>No events found in this category.</p>";
+          return;
+        }
+
+        filteredEvents.forEach((event) => {
+          const eventCard = document.createElement("div");
+          eventCard.className = "event-card";
+          eventCard.innerHTML = `
+                          <div class="event-img" style="background-image: url('${event.image}')"></div>
+                          <div class="event-info">
+                              <div class="event-date">${event.date}</div>
+                              <h3 class="event-title">${event.title}</h3>
+                              <div class="event-location">📍 ${event.location}</div>
+                              <div class="event-price">${event.price}</div>
+                              <button class="btn" style="width: 100%;">Get Tickets</button>
+                          </div>
+                      `;
+          eventsContainer.appendChild(eventCard);
+        });
+      }
+
+      // Filter events
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          loadEvents(btn.dataset.filter);
+        });
+      });
+
+      // FAQ toggle
+      document.querySelectorAll(".faq-question").forEach((question) => {
+        question.addEventListener("click", () => {
+          const item = question.parentElement;
+          item.classList.toggle("active");
+          question.querySelector("span").textContent = item.classList.contains(
+            "active"
+          )
+            ? "−"
+            : "+";
+        });
+      });
+
+      // Wallet connection simulation
+      let web3;
+      let userAccount;
+
+      async function connectWallet() {
+        // Update status to connecting
+        document.getElementById("walletStatus").textContent = "Connecting...";
+        document.getElementById("walletStatus").style.color = "orange";
+
+        try {
+          // Check if Web3 is injected (MetaMask or similar)
+          if (window.ethereum) {
+            web3 = new Web3(window.ethereum);
+
+            // Request account access
+            const accounts = await window.ethereum.request({
+              method: "eth_requestAccounts",
+            });
+            userAccount = accounts[0];
+
+            // Update UI
+            document.getElementById(
+              "connectWallet"
+            ).textContent = `${userAccount.substring(
+              0,
+              6
+            )}...${userAccount.substring(38)}`;
+            document.getElementById("walletStatus").textContent = "Connected ✓";
+            document.getElementById("walletStatus").style.color =
+              "var(--secondary)";
+
+            // Listen for account changes
+            window.ethereum.on("accountsChanged", (newAccounts) => {
+              if (newAccounts.length === 0) {
+                // Handle disconnection
+                userAccount = null;
+                document.getElementById("connectWallet").textContent =
+                  "Connect Wallet";
+                document.getElementById("walletStatus").textContent =
+                  "Not Connected";
+                document.getElementById("walletStatus").style.color = "#ff6b6b";
+              } else {
+                userAccount = newAccounts[0];
+                document.getElementById(
+                  "connectWallet"
+                ).textContent = `${userAccount.substring(
+                  0,
+                  6
+                )}...${userAccount.substring(38)}`;
+                document.getElementById("walletStatus").textContent =
+                  "Connected ✓";
+                document.getElementById("walletStatus").style.color =
+                  "var(--secondary)";
+              }
+            });
+
+            // Listen for chain changes
+            window.ethereum.on("chainChanged", (_chainId) => {
+              // Handle chain change by reloading the page
+              window.location.reload();
+            });
+
+            console.log("Connected:", userAccount);
+            return userAccount;
+          }
+          // Legacy dapp browsers
+          else if (window.web3) {
+            web3 = new Web3(window.web3.currentProvider);
+            const accounts = await web3.eth.getAccounts();
+            userAccount = accounts[0];
+
+            // Update UI for legacy connection
+            document.getElementById(
+              "connectWallet"
+            ).textContent = `${userAccount.substring(
+              0,
+              6
+            )}...${userAccount.substring(38)}`;
+            document.getElementById("walletStatus").textContent = "Connected ✓";
+            document.getElementById("walletStatus").style.color =
+              "var(--secondary)";
+
+            console.log("Connected (legacy):", userAccount);
+            return userAccount;
+          }
+          // No wallet detected
+          else {
+            document.getElementById("walletStatus").textContent =
+              "No Wallet Detected";
+            document.getElementById("walletStatus").style.color = "#ff6b6b";
+            alert(
+              "Please install MetaMask or another Ethereum wallet to use this feature!"
+            );
+            window.open("https://metamask.io/", "_blank");
+            return null;
+          }
+        } catch (error) {
+          console.error("Wallet connection error:", error);
+          document.getElementById("walletStatus").textContent =
+            "Connection Failed";
+          document.getElementById("walletStatus").style.color = "#ff6b6b";
+          alert("Error connecting wallet: " + error.message);
+          return null;
+        }
+      }
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        loadEvents();
+
+        // Add click event listener for wallet connection
+        document
+          .getElementById("connectWallet")
+          .addEventListener("click", connectWallet);
+
+        // Check if already connected
+        if (window.ethereum && window.ethereum.selectedAddress) {
+          connectWallet();
+        }
+      });
+      // Add EOSIO integration to your existing JavaScript
+
+// EOSIO JavaScript API setup
+const { Api, JsonRpc, RpcError } = require('eosjs');
+const { JsSignatureProvider } = require('eosjs/dist/eosjs-jssig');
+const fetch = require('node-fetch');
+const { TextEncoder, TextDecoder } = require('util');
+
+// EOSIO connection configuration
+const rpc = new JsonRpc('https://jungle3.greymass.com', { fetch }); // Testnet endpoint
+const signatureProvider = new JsSignatureProvider([]); // Will be populated when wallet connects
+const api = new Api({
+  rpc,
+  signatureProvider,
+  textDecoder: new TextDecoder(),
+  textEncoder: new TextEncoder(),
+});
+
+// Function to connect EOSIO wallet (like Anchor)
+async function connectEOSIOWallet() {
+  try {
+    // This assumes Anchor wallet or similar is available
+    if (window.eosAnchor) {
+      const result = await window.eosAnchor.connect();
+      const account = result.account;
+      
+      // Update UI
+      document.getElementById("connectWallet").textContent = 
+        `${account.name}@${account.authority}`;
+      document.getElementById("walletStatus").textContent = "Connected ✓";
+      document.getElementById("walletStatus").style.color = "var(--secondary)";
+      
+      // Add private key to signature provider (insecure for production!)
+      // In production, use wallet's signing functionality directly
+      signatureProvider.keys.push(result.privateKey);
+      
+      return account;
+    } else {
+      throw new Error("EOSIO wallet not found");
+    }
+  } catch (err) {
+    console.error("Wallet connection error:", err);
+    document.getElementById("walletStatus").textContent = "Connection Failed";
+    document.getElementById("walletStatus").style.color = "#ff6b6b";
+    throw err;
+  }
+}
+
+// Function to create an event
+async function createEvent(eventData) {
+  try {
+    // Convert data to EOSIO format
+    const action = {
+      account: 'ticketchain', // Your contract account name
+      name: 'createevt',
+      authorization: [{
+        actor: eventData.organizer,
+        permission: 'active',
+      }],
+      data: {
+        organizer: eventData.organizer,
+        event_id: eventData.id,
+        event_name: eventData.name,
+        description: eventData.description,
+        date: Math.floor(eventData.date.getTime() / 1000), // Convert to seconds
+        location: eventData.location,
+        total_tickets: eventData.totalTickets,
+        ticket_price: `${eventData.price.toFixed(4)} SYS`, // Example currency
+        royalty_percent: eventData.royaltyPercent,
+        max_resale_multiplier: eventData.maxResaleMultiplier,
+      },
+    };
+
+    // Send transaction
+    const result = await api.transact({
+      actions: [action]
+    }, {
+      blocksBehind: 3,
+      expireSeconds: 30,
+    });
+
+    console.log('Event created:', result.transaction_id);
+    return result;
+  } catch (err) {
+    console.error('Error creating event:', err);
+    throw err;
+  }
+}
+
+// Function to purchase a ticket
+async function purchaseTicket(buyer, eventId, seatNumber = 0) {
+  try {
+    const action = {
+      account: 'ticketchain',
+      name: 'purchticket',
+      authorization: [{
+        actor: buyer,
+        permission: 'active',
+      }],
+      data: {
+        buyer: buyer,
+        event_id: eventId,
+        seat_number: seatNumber,
+      },
+    };
+
+    const result = await api.transact({
+      actions: [action]
+    }, {
+      blocksBehind: 3,
+      expireSeconds: 30,
+    });
+
+    console.log('Ticket purchased:', result.transaction_id);
+    return result;
+  } catch (err) {
+    console.error('Error purchasing ticket:', err);
+    throw err;
+  }
+}
+
+// Update your wallet connection to support EOSIO
+async function connectWallet() {
+  try {
+    // Try EOSIO first
+    const account = await connectEOSIOWallet();
+    return account.name;
+  } catch (eosErr) {
+    console.log("EOSIO wallet not available, trying Ethereum");
+    
+    // Fall back to Ethereum if EOSIO fails
+    if (window.ethereum) {
+      return await connectEthereumWallet();
+    } else {
+      document.getElementById("walletStatus").textContent = "No Wallet Detected";
+      document.getElementById("walletStatus").style.color = "#ff6b6b";
+      alert("Please install Anchor or MetaMask wallet!");
+      return null;
+    }
+  }
+}
+    </script>
+  </body>
+</html>
